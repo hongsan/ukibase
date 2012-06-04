@@ -64,12 +64,13 @@ bool TaskConnect::execute(Worker* worker)
 				config->nodes[n.id()] = node;
 
 				if (n.id() == config->server_id) config->me = node;
+
 				if (n.online())
 				{
 					//connect to server
 					if (!server_connect(node, config->server_id))
 					{
-						DLOG(ERROR) << "Can not connect to server:"<<node->get_id();
+						DLOG(ERROR) << "Can not connect to server:" << node->get_id();
 						engine.stop();
 						return true;
 					}
@@ -103,7 +104,6 @@ bool TaskConnect::server_connect(servernode_ptr node, int my_id)
 	if (conn == NULL)
 	{
 		DLOG(ERROR) << "Error in server_connect to: " << node->get_ip() << ":" << node->get_port();
-		engine.stop();
 	}
 	else
 	{
@@ -121,10 +121,24 @@ bool TaskConnect::server_connect(servernode_ptr node, int my_id)
 		context->wait();
 		engine.release_context(context.get());
 
-		/**/
-
+		if (context->done)
+		{
+			int code;
+			_dec_declare2_(rep, context->get_reply()->get_content_data(), context->get_reply()->get_content_size());
+			_dec_get_var32_(rep, code);
+			if (_dec_valid_(rep) && code == ErrorCode::OK)
+			{
+				conn->asyn = true;
+				conn->authenticated = true;
+				conn->data = node.get();
+				conn->type = CT_S2S;
+				node->connection = conn;
+				node->state = READY;
+				return true;
+			}
+		}
 	}
-	return true;
+	return false;
 }
 
 } /* namespace ukibase */
