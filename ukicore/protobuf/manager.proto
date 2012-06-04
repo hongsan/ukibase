@@ -1,0 +1,15 @@
+message HelloRequest {
+	required uint32 id = 1;
+}
+
+message HelloReply {
+	required uint32 code = 1;
+	repeated group Nodes = 2 {
+		required uint32 id = 1;
+		required string name = 2;
+		required string host = 3;
+		required uint32 port = 4;
+		required string type = 5;
+		required bool online = 6;
+	}
+}
