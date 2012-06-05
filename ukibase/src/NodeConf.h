@@ -20,7 +20,7 @@ namespace ukibase
 
 typedef google::dense_hash_map<int, servernode_ptr> node_map;
 
-class ServerConfig: public Component
+class NodeConf: public Component
 {
 public:
 	string man_host;
@@ -30,8 +30,8 @@ public:
 	node_map nodes;
 	servernode_ptr me;
 
-	ServerConfig();
-	virtual ~ServerConfig();
+	NodeConf();
+	virtual ~NodeConf();
 	void init();
 	void start();
 	void stop();

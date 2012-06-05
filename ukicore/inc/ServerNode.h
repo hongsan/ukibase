@@ -15,7 +15,7 @@ namespace ukicore
 
 enum ServerState
 {
-	UNKNOWN, CONNECTED, READY, PROBLEM
+	UNKNOWN, CONNECTED, ONLINE, READY, PROBLEM
 };
 
 class ServerNode;

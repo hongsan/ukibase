@@ -33,7 +33,29 @@ void protobuf_ShutdownFile_manager_2eproto();
 class HelloRequest;
 class HelloReply;
 class HelloReply_Nodes;
+class NodeState;
 
+enum NodeState_State {
+  NodeState_State_UNKNOWN = 0,
+  NodeState_State_ONLINE = 1,
+  NodeState_State_READY = 2,
+  NodeState_State_PROBLEM = 3
+};
+bool NodeState_State_IsValid(int value);
+const NodeState_State NodeState_State_State_MIN = NodeState_State_UNKNOWN;
+const NodeState_State NodeState_State_State_MAX = NodeState_State_PROBLEM;
+const int NodeState_State_State_ARRAYSIZE = NodeState_State_State_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* NodeState_State_descriptor();
+inline const ::std::string& NodeState_State_Name(NodeState_State value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    NodeState_State_descriptor(), value);
+}
+inline bool NodeState_State_Parse(
+    const ::std::string& name, NodeState_State* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<NodeState_State>(
+    NodeState_State_descriptor(), name, value);
+}
 // ===================================================================
 
 class HelloRequest : public ::google::protobuf::Message {
@@ -356,6 +378,124 @@ class HelloReply : public ::google::protobuf::Message {
   
   void InitAsDefaultInstance();
   static HelloReply* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class NodeState : public ::google::protobuf::Message {
+ public:
+  NodeState();
+  virtual ~NodeState();
+  
+  NodeState(const NodeState& from);
+  
+  inline NodeState& operator=(const NodeState& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const NodeState& default_instance();
+  
+  void Swap(NodeState* other);
+  
+  // implements Message ----------------------------------------------
+  
+  NodeState* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const NodeState& from);
+  void MergeFrom(const NodeState& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  typedef NodeState_State State;
+  static const State UNKNOWN = NodeState_State_UNKNOWN;
+  static const State ONLINE = NodeState_State_ONLINE;
+  static const State READY = NodeState_State_READY;
+  static const State PROBLEM = NodeState_State_PROBLEM;
+  static inline bool State_IsValid(int value) {
+    return NodeState_State_IsValid(value);
+  }
+  static const State State_MIN =
+    NodeState_State_State_MIN;
+  static const State State_MAX =
+    NodeState_State_State_MAX;
+  static const int State_ARRAYSIZE =
+    NodeState_State_State_ARRAYSIZE;
+  static inline const ::google::protobuf::EnumDescriptor*
+  State_descriptor() {
+    return NodeState_State_descriptor();
+  }
+  static inline const ::std::string& State_Name(State value) {
+    return NodeState_State_Name(value);
+  }
+  static inline bool State_Parse(const ::std::string& name,
+      State* value) {
+    return NodeState_State_Parse(name, value);
+  }
+  
+  // accessors -------------------------------------------------------
+  
+  // required uint32 id = 1;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 id() const;
+  inline void set_id(::google::protobuf::uint32 value);
+  
+  // required .NodeState.State state = 2;
+  inline bool has_state() const;
+  inline void clear_state();
+  static const int kStateFieldNumber = 2;
+  inline ::NodeState_State state() const;
+  inline void set_state(::NodeState_State value);
+  
+  // @@protoc_insertion_point(class_scope:NodeState)
+ private:
+  inline void set_has_id();
+  inline void clear_has_id();
+  inline void set_has_state();
+  inline void clear_has_state();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::uint32 id_;
+  int state_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_manager_2eproto();
+  friend void protobuf_AssignDesc_manager_2eproto();
+  friend void protobuf_ShutdownFile_manager_2eproto();
+  
+  void InitAsDefaultInstance();
+  static NodeState* default_instance_;
 };
 // ===================================================================
 
@@ -681,6 +821,55 @@ HelloReply::mutable_nodes() {
   return &nodes_;
 }
 
+// -------------------------------------------------------------------
+
+// NodeState
+
+// required uint32 id = 1;
+inline bool NodeState::has_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void NodeState::set_has_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void NodeState::clear_has_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void NodeState::clear_id() {
+  id_ = 0u;
+  clear_has_id();
+}
+inline ::google::protobuf::uint32 NodeState::id() const {
+  return id_;
+}
+inline void NodeState::set_id(::google::protobuf::uint32 value) {
+  set_has_id();
+  id_ = value;
+}
+
+// required .NodeState.State state = 2;
+inline bool NodeState::has_state() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void NodeState::set_has_state() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void NodeState::clear_has_state() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void NodeState::clear_state() {
+  state_ = 0;
+  clear_has_state();
+}
+inline ::NodeState_State NodeState::state() const {
+  return static_cast< ::NodeState_State >(state_);
+}
+inline void NodeState::set_state(::NodeState_State value) {
+  GOOGLE_DCHECK(::NodeState_State_IsValid(value));
+  set_has_state();
+  state_ = value;
+}
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -688,6 +877,10 @@ HelloReply::mutable_nodes() {
 namespace google {
 namespace protobuf {
 
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::NodeState_State>() {
+  return ::NodeState_State_descriptor();
+}
 
 }  // namespace google
 }  // namespace protobuf

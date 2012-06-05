@@ -12,7 +12,8 @@
 namespace ukiman
 {
 
-Manager::Manager(): Component(COMP_MANAGER)
+Manager::Manager() :
+		Component(COMP_MANAGER)
 {
 }
 
@@ -38,10 +39,27 @@ void Manager::init()
 		throw std::runtime_error("Configuration file do not contain man_port parameter");
 	}
 
+	/* load server list */
+	const Setting &nodes = config.getRoot()["servers"];
+	int count = nodes.getLength();
+
+	for (int i = 0; i < count; i++)
+	{
+		const Setting &server_node = nodes[i];
+		int port, id;
+		std::string ip, type, name;
+
+		if (!(server_node.lookupValue("name", name) && server_node.lookupValue("ip", ip) && server_node.lookupValue("port", port) && server_node.lookupValue("type", type) && server_node.lookupValue("id", id)))
+		{
+			throw std::runtime_error("Error in load server connections informations");
+		}
+		servernode_ptr node(new ServerNode(id, name, type, ip, port));
+		this->nodes.push_back(node);
+	}
+
 	engine.listen_connection(host, port); //start listen
 
-	/* register services */
-	DLOG(INFO)<<"Register HelloService...";
+	/* register services */DLOG(INFO) << "Register HelloService...";
 	service_ptr hello_service = boost::make_shared<HelloService>();
 	Engine::get_instance().register_service(hello_service);
 	hello_service->activate();

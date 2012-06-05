@@ -10,7 +10,7 @@
 #include <glog/logging.h>
 #include "commons/MessageUtil.h"
 #include "commons/Constant.h"
-#include "ServerConfig.h"
+#include "NodeConf.h"
 #include "manager.pb.h"
 
 using namespace ukicore;
@@ -27,7 +27,7 @@ TaskConnect::TaskConnect(string host, int port)
 bool TaskConnect::execute(Worker* worker)
 {
 	Engine& engine = Engine::get_instance();
-	ServerConfig* config = (ServerConfig*) engine.get_component("serverconf").get();
+	NodeConf* config = (NodeConf*) engine.get_component(COMP_SERVERCONF).get();
 
 	connection_ptr conn = engine.open_connection(host, port);
 	if (conn == NULL)
@@ -64,36 +64,35 @@ bool TaskConnect::execute(Worker* worker)
 				config->nodes[n.id()] = node;
 
 				if (n.id() == config->server_id) config->me = node;
-
 				if (n.online())
 				{
 					//connect to server
 					if (!server_connect(node, config->server_id))
 					{
 						DLOG(ERROR) << "Can not connect to server:" << node->get_id();
-						engine.stop();
 						return true;
 					}
 				}
-
-				if (config->me == NULL)
-				{
-					DLOG(ERROR) << "Server node list must contain this node";
-					engine.stop();
-					return true;
-				}
-
-				engine.listen_connection(config->me->get_ip(), config->me->get_port());
-
-				/* send online status to manager server */
-
 			}
+
+			if (config->me == NULL)
+			{
+				DLOG(ERROR) << "Server node list must contain this node";
+				return true;
+			}
+			engine.listen_connection(config->me->get_ip(), config->me->get_port());
+
+			/* send node state to Manager server */
+			NodeState state;
+			state.set_id(config->server_id);
+			state.set_state(NodeState::ONLINE);
+			message_ptr msg = Message::pb_encode(state,MessageType::NODE_STATE,0,0);
+			conn->send_message(msg);
 			return true;
 		}
 	}
 
 	DLOG(ERROR) << "Error in get node list from manager server";
-	engine.stop();
 	return true;
 }
 
@@ -112,7 +111,7 @@ bool TaskConnect::server_connect(servernode_ptr node, int my_id)
 		uint64_t msg_id = engine.next_message_id();
 		_enc_declare_(ping, 1024);
 		_enc_put_msg_header_(ping, MessageType::PING, msg_id, 0);
-		_enc_put_fix16_(ping, my_id);
+		_enc_put_var32_(ping, my_id);
 		_enc_update_msg_size_(ping);
 
 		boost::scoped_ptr<ReplyContext> context(new ReplyContext(msg_id));

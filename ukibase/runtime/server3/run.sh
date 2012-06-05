@@ -1,0 +1,1 @@
+../../Debug/ukibase ukibase.conf

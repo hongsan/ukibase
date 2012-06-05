@@ -13,3 +13,15 @@ message HelloReply {
 		required bool online = 6;
 	}
 }
+
+message NodeState {
+	enum State
+	{
+		UNKNOWN = 0;
+		ONLINE = 1;
+		READY = 2;
+		PROBLEM = 3;
+	}
+	required uint32 id = 1;
+	required State state = 2;
+}

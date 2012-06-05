@@ -13,8 +13,8 @@
 #define REPLY_CONTEXT 	1
 
 /* component id */
-#define COMP_SERVERCONF		"serverconf"
-#define COMP_MANAGER		"manager"
+#define COMP_SERVERCONF		"ukinodes"
+#define COMP_MANAGER		"ukiman"
 
 /*****************************************************************************************/
 namespace MessageType
@@ -22,7 +22,7 @@ namespace MessageType
 enum
 {
 	/* core */
-	PING = 1, PONG = 2, REPLY = 3, BACKUP = 4, HELLO_REQ = 5,
+	PING = 1, PONG = 2, REPLY = 3, BACKUP = 4, HELLO_REQ = 5, NODE_STATE =6,
 	/* filedb  */
 	CREATE = 80, WRITE = 81, READ = 82, SET_SIZE = 83, GET_SIZE = 84,
 	/* object */

@@ -5,7 +5,7 @@
  *      Author: nhsan
  */
 
-#include "ServerConfig.h"
+#include "NodeConf.h"
 #include "Engine.h"
 #include "TaskConnect.h"
 #include "services/ConnectService.h"
@@ -15,19 +15,19 @@
 namespace ukibase
 {
 
-ServerConfig::ServerConfig() :
+NodeConf::NodeConf() :
 		Component(COMP_SERVERCONF)
 {
 	nodes.set_deleted_key(-1);
 	nodes.set_empty_key(-2);
 }
 
-ServerConfig::~ServerConfig()
+NodeConf::~NodeConf()
 {
 
 }
 
-void ServerConfig::init()
+void NodeConf::init()
 {
 	Config& config = Engine::get_instance().get_configuration();
 	Setting &sconf = config.getRoot()["general"];
@@ -53,13 +53,13 @@ void ServerConfig::init()
 	connect_service->activate();
 }
 
-void ServerConfig::start()
+void NodeConf::start()
 {
 	task_ptr task = new TaskConnect(man_host, man_port);
 	Engine::get_instance().get_tasks().enqueue(task);
 }
 
-void ServerConfig::stop()
+void NodeConf::stop()
 {
 
 }
