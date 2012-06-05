@@ -50,7 +50,10 @@ bool HelloService::process(message_ptr const & message, connection_ptr const & c
 			node->set_port(manager->nodes[i]->get_port());
 			node->set_name(manager->nodes[i]->get_name());
 
-			if (manager->nodes[i]->state == ONLINE || manager->nodes[i]->state == READY) node->set_online(true);
+			if (manager->nodes[i]->state == ONLINE || manager->nodes[i]->state == READY || manager->nodes[i]->state == CONNECTED)
+			{
+				node->set_online(true);
+			}
 			else node->set_online(false);
 
 			if (manager->nodes[i]->get_id() == request.id())
@@ -60,6 +63,7 @@ bool HelloService::process(message_ptr const & message, connection_ptr const & c
 				connection->asyn = true;
 				connection->type = CT_S2S;
 				manager->nodes[i]->connection = connection;
+				manager->nodes[i]->state = CONNECTED;
 			}
 
 		}
@@ -79,7 +83,7 @@ bool HelloService::process(message_ptr const & message, connection_ptr const & c
 				if (manager->nodes[i]->get_id() == state.id())
 				{
 					if (state.state() == NodeState::ONLINE) manager->nodes[i]->state = ONLINE;
-					DLOG(INFO)<<"Node "<< state.id()<<" is online";
+					DLOG(INFO) << "Node " << state.id() << " is online";
 				}
 			}
 		}
