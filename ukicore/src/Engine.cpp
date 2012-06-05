@@ -100,6 +100,8 @@ int Engine::listen_connection(std::string host, int port)
 		close(listen_fd);
 		return -1;
 	}
+	DLOG(INFO)<<"Start listing on "<<host<<":"<<port;
+	fds.insert(listen_fd);
 	return listen_fd;
 }
 
@@ -158,13 +160,6 @@ void Engine::main_loop()
 	int s;
 	struct epoll_event event;
 	struct epoll_event *events;
-
-	epoll_fd = epoll_create1(0);
-	if (epoll_fd == -1)
-	{
-		DLOG(ERROR) << "Error in epoll_create";
-		return;
-	}
 
 	/* Buffer where events are returned */
 	events = (epoll_event*) calloc(max_event, sizeof event);
@@ -357,6 +352,13 @@ void Engine::init(const char *fname)
 	service_ptr core_service = boost::make_shared<CoreService>();
 	register_service(core_service);
 	core_service->activate();
+
+	/* create epoll */
+	epoll_fd = epoll_create1(0);
+	if (epoll_fd == -1)
+	{
+		throw std::runtime_error("Error in epoll_create");
+	}
 
 	/* init components */
 	for (component_map::iterator it = components.begin(); it != components.end(); it++)

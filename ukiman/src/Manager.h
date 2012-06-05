@@ -10,7 +10,9 @@
 #include "Component.h"
 #include "Engine.h"
 
-namespace ukicore
+using namespace ukicore;
+
+namespace ukiman
 {
 
 class Manager: public Component

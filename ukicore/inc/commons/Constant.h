@@ -11,6 +11,11 @@
 #define NUMBER_REPLICAS 100
 #define MAXPACKETSIZE 	(63*1024)
 #define REPLY_CONTEXT 	1
+
+/* component id */
+#define COMP_SERVERCONF		"serverconf"
+#define COMP_MANAGER		"manager"
+
 /*****************************************************************************************/
 namespace MessageType
 {

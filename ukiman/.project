@@ -3,6 +3,7 @@
 	<name>ukiman</name>
 	<comment></comment>
 	<projects>
+		<project>ukicore</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

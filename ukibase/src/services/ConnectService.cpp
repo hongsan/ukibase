@@ -30,7 +30,7 @@ bool ConnectService::process(message_ptr const & message, connection_ptr const &
 	_dec_get_var32_(req, id);
 	if (!_dec_valid_(req)) return true;
 
-	ServerConfig* config = (ServerConfig*)engine.get_component("serverconf").get();
+	ServerConfig* config = (ServerConfig*)engine.get_component(COMP_SERVERCONF).get();
 	servernode_map::iterator it = config->nodes.find(id);
 	if (it != config->nodes.end())
 	{

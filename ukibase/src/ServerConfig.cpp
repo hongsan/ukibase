@@ -8,12 +8,15 @@
 #include "ServerConfig.h"
 #include "Engine.h"
 #include "TaskConnect.h"
+#include "services/ConnectService.h"
+#include <glog/logging.h>
+#include "commons/Constant.h"
 
 namespace ukibase
 {
 
 ServerConfig::ServerConfig() :
-		Component("serverconf")
+		Component(COMP_SERVERCONF)
 {
 	nodes.set_deleted_key(-1);
 	nodes.set_empty_key(-2);
@@ -42,6 +45,12 @@ void ServerConfig::init()
 	{
 		throw std::runtime_error("Configuration file do not contain server id parameter");
 	}
+
+	/* register services */
+	DLOG(INFO)<<"Register ConnectService...";
+	service_ptr connect_service = boost::make_shared<ConnectService>();
+	Engine::get_instance().register_service(connect_service);
+	connect_service->activate();
 }
 
 void ServerConfig::start()

@@ -8,6 +8,7 @@
 #ifndef COMPONENT_H_
 #define COMPONENT_H_
 #include "string"
+
 namespace ukicore
 {
 
@@ -20,9 +21,11 @@ public:
 	{
 		this->id = id;
 	}
+
 	virtual ~Component()
 	{
 	}
+
 	std::string get_id()
 	{
 		return id;

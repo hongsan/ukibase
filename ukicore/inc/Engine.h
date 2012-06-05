@@ -5,13 +5,14 @@
  *      Author: nhsan
  */
 
-#ifndef MANAGER_H_
-#define MANAGER_H_
+#ifndef ENGINE_H_
+#define ENGINE_H_
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <google/dense_hash_map>
 #include <google/dense_hash_set>
 #include <boost/thread/mutex.hpp>
 #include <vector>
+#include "Component.h"
 #include "Connection.h"
 #include "Service.h"
 #include "Worker.h"
@@ -19,7 +20,6 @@
 #include "ServerNode.h"
 #include <libconfig.h++>
 #include "Context.h"
-#include "Component.h"
 
 using namespace libconfig;
 
