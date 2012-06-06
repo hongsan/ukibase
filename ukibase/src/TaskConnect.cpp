@@ -85,7 +85,7 @@ bool TaskConnect::execute(Worker* worker)
 			/* send node state to Manager server */
 			NodeState state;
 			state.set_id(config->server_id);
-			state.set_state(NodeState::ONLINE);
+			state.set_state(NodeState::READY);
 			message_ptr msg = Message::pb_encode(state,MessageType::NODE_STATE,0,0);
 			conn->send_message(msg);
 			return true;

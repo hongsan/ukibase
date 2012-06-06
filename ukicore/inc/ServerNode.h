@@ -15,7 +15,7 @@ namespace ukicore
 
 enum ServerState
 {
-	UNKNOWN, CONNECTED, ONLINE, READY, PROBLEM
+	UNKNOWN = 0, CONNECTED = 1, READY = 2, PROBLEM = 3
 };
 
 class ServerNode;
@@ -69,7 +69,6 @@ public:
 		return type;
 	}
 };
-
 
 } /* namespace core */
 #endif /* SERVERNODE_H_ */

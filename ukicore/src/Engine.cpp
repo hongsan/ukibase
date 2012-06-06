@@ -255,7 +255,7 @@ void Engine::start()
 	/* start components */
 	for (component_map::iterator it = components.begin(); it != components.end(); it++)
 	{
-		DLOG(INFO) << "Component:" << it->second->get_id();
+		DLOG(INFO) << "Start component:" << it->second->get_id();
 		it->second->start();
 	}
 
@@ -277,7 +277,7 @@ void Engine::stop()
 	/* stop components */
 	for (component_map::iterator it = components.begin(); it != components.end(); it++)
 	{
-		DLOG(INFO) << "Component:" << it->second->get_id();
+		DLOG(INFO) << "Stop component:" << it->second->get_id();
 		it->second->stop();
 	}
 
