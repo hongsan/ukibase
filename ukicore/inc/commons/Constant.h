@@ -15,6 +15,8 @@
 /* component id */
 #define COMP_SERVERCONF		"ukinodes"
 #define COMP_MANAGER		"ukiman"
+#define COMP_DBSERVER		"dbserver"
+#define COMP_DBCLIENT		"dbclient"
 
 /*****************************************************************************************/
 namespace MessageType
@@ -30,7 +32,7 @@ enum
 	/* sequencer */
 	SEQ_CREATE = 113, SEQ_DESTROY=114, SEQ_INC = 115, SEQ_DEC = 116,
 	/* list */
-	LIST_CREATE = 120, LIST_DESTROY = 121, LIST_PUSHBACK = 122, LIST_PUSHFRONT = 123, LIST_SIZE = 124, LIST_INDEX = 125, LIST_REMOVE = 126, LIST_RANGE = 127,
+	LIST_CREATE = 120, LIST_DESTROY = 121, LIST_PUSHBACK = 122, LIST_PUSHFRONT = 123, LIST_SIZE = 124, LIST_INDEX = 125, LIST_REMOVE = 126, LIST_RANGE = 127, LIST_CLEAR=128
 };
 } // namespace MessageType
 

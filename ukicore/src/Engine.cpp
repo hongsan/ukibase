@@ -349,9 +349,7 @@ void Engine::init(const char *fname)
 	}
 
 	/* register services */
-	service_ptr core_service = boost::make_shared<CoreService>();
-	register_service(core_service);
-	core_service->activate();
+	REGISTER_SERVICE(CoreService);
 
 	/* create epoll */
 	epoll_fd = epoll_create1(0);
@@ -409,16 +407,6 @@ Context* Engine::get_context(uint64_t id)
 	context_map::iterator it = contexts.find(id);
 	if (it == contexts.end()) return NULL;
 	return it->second;
-}
-
-message_ptr Engine::wait_reply(uint64_t id, int timeout)
-{
-	boost::scoped_ptr<ReplyContext> context(new ReplyContext(id));
-	save_context(context.get());
-	context->wait(timeout);
-	release_context(context.get());
-	if (context->done) return context->get_reply();
-	return message_ptr();
 }
 
 void Engine::register_component(component_ptr component)

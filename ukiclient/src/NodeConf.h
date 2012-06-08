@@ -16,7 +16,7 @@
 
 using namespace std;
 using namespace ukicore;
-namespace ukibase
+namespace dbclient
 {
 
 typedef google::dense_hash_map<int, servernode_ptr> node_map;
@@ -27,9 +27,7 @@ public:
 	string man_host;
 	int man_port;
 	connection_ptr man_connection;
-	uint32_t server_id;
 	node_map nodes;
-	servernode_ptr me;
 	hashring_ptr ring;
 
 	NodeConf();

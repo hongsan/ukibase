@@ -31,9 +31,21 @@ public:
 		return id;
 	}
 
-	virtual void init() = 0;
-	virtual void start() = 0;
-	virtual void stop() = 0;
+	virtual void init()
+	{
+
+	}
+
+	virtual void start()
+	{
+
+	}
+
+	virtual void stop()
+	{
+
+	}
+
 };
 
 }

@@ -8,11 +8,10 @@
 #include "NodeConf.h"
 #include "Engine.h"
 #include "TaskConnect.h"
-#include "services/ConnectService.h"
 #include <glog/logging.h>
 #include "commons/Constant.h"
 
-namespace ukibase
+namespace dbclient
 {
 
 NodeConf::NodeConf() :
@@ -41,15 +40,6 @@ void NodeConf::init()
 	{
 		throw std::runtime_error("Configuration file do not contain man_port parameter");
 	}
-
-	if (!sconf.lookupValue("server_id", server_id))
-	{
-		throw std::runtime_error("Configuration file do not contain server id parameter");
-	}
-
-	/* register services */
-	DLOG(INFO)<<"Register ConnectService...";
-	REGISTER_SERVICE(ConnectService);
 }
 
 void NodeConf::start()

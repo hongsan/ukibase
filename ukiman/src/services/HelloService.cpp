@@ -65,7 +65,6 @@ bool HelloService::process(message_ptr const & message, connection_ptr const & c
 				manager->nodes[i]->connection = connection;
 				manager->nodes[i]->state = CONNECTED;
 			}
-
 		}
 
 		message_ptr msg = Message::pb_encode(reply, MessageType::REPLY, message->id, 0);

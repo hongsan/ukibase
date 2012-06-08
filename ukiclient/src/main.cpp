@@ -10,8 +10,9 @@
 #include "Engine.h"
 #include <boost/lexical_cast.hpp>
 #include <boost/make_shared.hpp>
-#include "NodeConf.h"
 #include "db/Database.h"
+#include "NodeConf.h"
+#include "TestTask.h"
 
 using namespace std;
 using namespace ukicore;
@@ -24,10 +25,10 @@ int main(int argc, char *argv[])
 	Engine& engine = Engine::get_instance();
 
 	/* register components */
-	component_ptr server = boost::make_shared<ukibase::NodeConf>();
+	component_ptr server = boost::make_shared<dbclient::NodeConf>();
 	engine.register_component(server);
 
-	component_ptr database = boost::make_shared<ukibase::Database>();
+	component_ptr database = boost::make_shared<dbclient::Database>();
 	engine.register_component(database);
 
 	engine.init(argv[1]);

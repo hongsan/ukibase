@@ -35,6 +35,13 @@ typedef google::dense_hash_map<std::string, component_ptr> component_map;
 typedef google::dense_hash_map<uint32_t, Worker*> mqueue_map;
 typedef google::dense_hash_set<int> listenfd_set;
 
+#define REGISTER_SERVICE(type)\
+{\
+	service_ptr _service = boost::make_shared<type>();\
+	Engine::get_instance().register_service(_service);\
+	_service->activate();\
+}
+
 class Engine
 {
 private:
@@ -90,7 +97,6 @@ public:
 	service_vec& get_services();
 	Config& get_configuration();
 
-
 	/* service routines */
 	void register_service(service_ptr service);
 	void process_message(message_ptr const & message, connection_ptr const & connection);
@@ -99,7 +105,6 @@ public:
 	void save_context(Context* tracker);
 	Context* get_context(uint64_t id);
 	void release_context(Context* tracker);
-	message_ptr wait_reply(uint64_t id, int timeout = 10);
 
 	/* unique message id */
 	uint64_t next_message_id();

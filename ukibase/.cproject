@@ -39,6 +39,8 @@
 							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.linker.252858214" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker">
 								<option id="gnu.cpp.link.option.libs.1891099109" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="ukicore"/>
+									<listOptionValue builtIn="false" value="leveldb"/>
+									<listOptionValue builtIn="false" value="snappy"/>
 									<listOptionValue builtIn="false" value="protobuf"/>
 									<listOptionValue builtIn="false" value="boost_thread"/>
 									<listOptionValue builtIn="false" value="glog"/>
