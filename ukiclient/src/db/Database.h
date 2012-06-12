@@ -14,6 +14,7 @@ using namespace std;
 using namespace ukicore;
 #include "commons/MurmurHash3.h"
 #include "../NodeConf.h"
+#include "Collection.h"
 
 namespace dbclient
 {
@@ -25,7 +26,6 @@ private:
 public:
 	Database();
 	virtual ~Database();
-
 	void init();
 
 	/* general object API */
@@ -34,44 +34,10 @@ public:
 	int del(uint32_t type, string key);
 	int exist(uint32_t type, string key);
 
-	/* sequencer API */
-	int seq_create(string key, uint64_t initial);
-	int seq_destroy(string key);
-	int seq_inc(string key, uint64_t& val);
-	int seq_dec(string key, uint64_t& val);
-
-	/* list API */
-	int list_create(string key);
-	int list_destroy(string key);
-	int list_push_back(string key, string val);
-	int list_push_front(string key, string val);
-	int list_mpush_back(string key, vector<string>& vals);
-	int list_mpush_front(string key, vector<string>& vals);
-	int list_size(string key, uint32_t& size);
-	int list_range(string key, int index, int count, vector<string>& vals);
-	int list_remove(string key, int index);
-	int list_index(string key, int index, string& val);
-	int list_clear(string key);
-
-	/* hash API */
-	int hash_create(string key);
-	int hash_destroy(string key);
-	int hash_set(string key, string ikey, string ival);
-	int hash_get(string key, string ikey, string& ival);
-	int hash_del(string key, string ikey);
-	int hash_exist(string key, string ikey);
-	int hash_size(string key, string ikey);
-	int hash_vals(string key, vector<string>& vals);
-	int hash_keys(string key, vector<string>& keys);
-	int hash_data(string key, map<string, string>& data);
-	int hash_mget(string key, vector<string> ikeys, map<string, string>& ivals);
-	int hash_mset(string key, map<string, string>& data);
-
-	/* filedb */
-	int create(int size, string& key);
-	int write(string key, int offset, int size, const char* data);
-	int read(string key, int offset, int size, char* data);
-	int size(string key, int& size);
+	/* collection API */
+	collection_ptr get_collection(string id);
+	int create_collection(string id);
+	int drop_collection();
 };
 
 #define DO_REQUEST_REPLY\

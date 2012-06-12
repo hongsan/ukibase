@@ -10,22 +10,15 @@
 #include "Engine.h"
 #include "leveldb/db.h"
 #include "HashRing.h"
-#include <string>
 #include <google/dense_hash_map>
-#include <list>
-using namespace std;
 using namespace ukicore;
+using namespace std;
 
 namespace ukibase
 {
 
-typedef google::dense_hash_map<string, list<message_ptr> > lock_map;
-
 class Database: public Component
 {
-private:
-	lock_map locks;
-	boost::mutex lock_mutex;
 public:
 	leveldb::Options options;
 	leveldb::DB* db;
@@ -34,14 +27,20 @@ public:
 
 	Database();
 	virtual ~Database();
-
 	void init();
 
+	/* object */
 	int set(leveldb::Slice& key, string& val);
 	int get(leveldb::Slice& key, string* val);
 	int del(leveldb::Slice& key);
 	bool exist(leveldb::Slice& key);
 
+	/* collection */
+	int col_create(string& key);
+	int col_destroy(string& key);
+	int col_get_id(string& key, uint64_t& id);
+
+	/* list */
 	int list_create(string& key);
 	int list_destroy(string& key);
 	int list_pushback(string& key, string& val);

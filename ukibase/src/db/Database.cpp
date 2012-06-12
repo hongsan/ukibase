@@ -9,8 +9,9 @@
 #include "leveldb/cache.h"
 #include <glog/logging.h>
 #include "commons/Constant.h"
-#include "services/SequencerService.h"
-#include "services/ListService.h"
+//#include "services/SequencerService.h"
+//#include "services/ListService.h"
+#include "services/ObjectService.h"
 #include "commons/MessageUtil.h"
 #include "../NodeConf.h"
 
@@ -25,9 +26,6 @@ Database::Database() :
 	options.create_if_missing = true;
 	leveldb::Status status = leveldb::DB::Open(options, "db", &db);
 	assert(status.ok());
-
-	locks.set_empty_key("");
-	locks.set_deleted_key(" ");
 }
 
 Database::~Database()
@@ -41,10 +39,10 @@ void Database::init()
 	NodeConf* config = (NodeConf*) Engine::get_instance().get_component(COMP_SERVERCONF).get();
 	ring = config->ring;
 	me = config->me;
-	DLOG(INFO)<<"Register ListService...";
-	REGISTER_SERVICE(ListService);
-	DLOG(INFO)<<"Register SequencerService...";
-	REGISTER_SERVICE(SequencerService);
+	DLOG(INFO)<<"Register ObjectService...";
+	REGISTER_SERVICE(ObjectService);
+//	DLOG(INFO)<<"Register SequencerService...";
+//	REGISTER_SERVICE(SequencerService);
 }
 
 int Database::set(leveldb::Slice& key, string& val)

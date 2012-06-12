@@ -14,8 +14,7 @@
 namespace dbclient
 {
 
-NodeConf::NodeConf() :
-		Component(COMP_SERVERCONF)
+NodeConf::NodeConf() : Component(COMP_SERVERCONF)
 {
 	nodes.set_deleted_key(-1);
 	nodes.set_empty_key(-2);
@@ -24,7 +23,6 @@ NodeConf::NodeConf() :
 
 NodeConf::~NodeConf()
 {
-
 }
 
 void NodeConf::init()

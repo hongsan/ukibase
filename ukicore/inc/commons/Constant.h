@@ -24,16 +24,11 @@ namespace MessageType
 enum
 {
 	/* core */
-	PING = 1, PONG = 2, REPLY = 3, BACKUP = 4, HELLO_REQ = 5, NODE_STATE =6,
-	/* filedb  */
-	CREATE = 80, WRITE = 81, READ = 82, SET_SIZE = 83, GET_SIZE = 84,
+	PING = 1, PONG = 2, REPLY = 3, BACKUP = 4, HELLO_REQ = 5, NODE_STATE = 6,
 	/* object */
-	OBJ_SET = 100, OBJ_GET = 101, OBJ_DEL = 102,
-	/* sequencer */
-	SEQ_CREATE = 113, SEQ_DESTROY=114, SEQ_INC = 115, SEQ_DEC = 116,
-	/* list */
-	LIST_CREATE = 120, LIST_DESTROY = 121, LIST_PUSHBACK = 122, LIST_PUSHFRONT = 123, LIST_SIZE = 124, LIST_INDEX = 125, LIST_REMOVE = 126, LIST_RANGE = 127, LIST_CLEAR=128
+	OBJ_SET = 100, OBJ_GET = 101, OBJ_DEL = 102, OBJ_EXIST = 103, OBJ_INC = 104,
 };
+
 } // namespace MessageType
 
 /*****************************************************************************************/
