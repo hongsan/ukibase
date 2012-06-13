@@ -45,6 +45,7 @@ uint64_t Database::next_type_id()
 	uint64_t msg_id = engine.next_message_id();
 	_enc_declare_(req, size);
 	_enc_put_msg_header_(req, MessageType::SEQ_TYPE, msg_id, shard);
+	_enc_put_string_(req, id);
 	_enc_update_msg_size_(req);
 
 	servernode_ptr node = ring->get_node(shard);

@@ -19,13 +19,12 @@ int Database::col_create(string id, uint64_t& cid)
 {
 	Engine& engine = Engine::get_instance();
 	uint32_t shard;
-	MurmurHash3_x86_32(id.c_str(), id.size(), 0, &shard);
+	MurmurHash3_x86_32(id.c_str(), id.size(), DataType::COLLECTION, &shard);
 
 	int size = id.size() + 32;
 	uint64_t msg_id = engine.next_message_id();
 	_enc_declare_(req, size);
 	_enc_put_msg_header_(req, MessageType::COL_CREATE, msg_id, shard);
-	_enc_put_fix32_(req, shard);
 	_enc_put_string_(req, id);
 	_enc_update_msg_size_(req);
 
@@ -43,13 +42,12 @@ int Database::col_drop(string id)
 {
 	Engine& engine = Engine::get_instance();
 	uint32_t shard;
-	MurmurHash3_x86_32(id.c_str(), id.size(), 0, &shard);
+	MurmurHash3_x86_32(id.c_str(), id.size(), DataType::COLLECTION, &shard);
 
 	int size = id.size() + 32;
 	uint64_t msg_id = engine.next_message_id();
 	_enc_declare_(req, size);
 	_enc_put_msg_header_(req, MessageType::COL_DROP, msg_id, shard);
-	_enc_put_fix32_(req, shard);
 	_enc_put_string_(req, id);
 	_enc_update_msg_size_(req);
 
@@ -63,13 +61,12 @@ int Database::col_id(string id, uint64_t& cid)
 {
 	Engine& engine = Engine::get_instance();
 	uint32_t shard;
-	MurmurHash3_x86_32(id.c_str(), id.size(), 0, &shard);
+	MurmurHash3_x86_32(id.c_str(), id.size(), DataType::COLLECTION, &shard);
 
 	int size = id.size() + 32;
 	uint64_t msg_id = engine.next_message_id();
 	_enc_declare_(req, size);
 	_enc_put_msg_header_(req, MessageType::COL_ID, msg_id, shard);
-	_enc_put_fix32_(req, shard);
 	_enc_put_string_(req, id);
 	_enc_update_msg_size_(req);
 
