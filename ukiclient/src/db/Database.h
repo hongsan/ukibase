@@ -33,6 +33,7 @@ public:
 	int get(uint32_t type, string key, string* val);
 	int del(uint32_t type, string key);
 	int exist(uint32_t type, string key);
+	int inc(uint32_t type, string key, uint64_t& val);
 
 	/* collection API */
 	collection_ptr get_collection(string id);

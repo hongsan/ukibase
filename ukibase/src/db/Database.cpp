@@ -39,8 +39,8 @@ void Database::init()
 	NodeConf* config = (NodeConf*) Engine::get_instance().get_component(COMP_SERVERCONF).get();
 	ring = config->ring;
 	me = config->me;
-	DLOG(INFO)<<"Register ObjectService...";
-	REGISTER_SERVICE(ObjectService);
+	DLOG(INFO) << "Register ObjectService...";
+	REGISTER_SERVICE (ObjectService);
 //	DLOG(INFO)<<"Register SequencerService...";
 //	REGISTER_SERVICE(SequencerService);
 }
@@ -75,6 +75,26 @@ bool Database::exist(leveldb::Slice& key)
 	if (status.ok()) return true;
 	if (status.IsNotFound()) return false;
 	return false;
+}
+
+int Database::inc(leveldb::Slice& key, uint64_t& val)
+{
+	string sval;
+	leveldb::Status status = db->Get(leveldb::ReadOptions(), key, &sval);
+	uint64_t ival = 0;
+	if (status.ok())
+	{
+		_dec_declare2_(v, sval.c_str(), sval.size());
+		_dec_get_fix64_(v,ival);
+		if (!_dec_valid_(v)) return ErrorCode::DB_ERROR;
+	}
+	val += ival;
+	_enc_declare_(res, 32);
+	_enc_put_fix64_(res,val);
+	string result(_enc_data_(res), _enc_size_(res));
+	status = db->Put(leveldb::WriteOptions(), key, result);
+	if (status.ok()) return ErrorCode::OK;
+	return ErrorCode::DB_ERROR;
 }
 
 } /* namespace db */

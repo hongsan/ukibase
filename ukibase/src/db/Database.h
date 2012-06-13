@@ -34,6 +34,7 @@ public:
 	int get(leveldb::Slice& key, string* val);
 	int del(leveldb::Slice& key);
 	bool exist(leveldb::Slice& key);
+	int inc(leveldb::Slice& key, uint64_t& val);
 
 	/* collection */
 	int col_create(string& key);

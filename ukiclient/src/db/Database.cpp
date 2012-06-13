@@ -99,6 +99,31 @@ int Database::del(uint32_t type, string key)
 	return code;
 }
 
+int Database::inc(uint32_t type, string key, uint64_t& val)
+{
+	Engine& engine = Engine::get_instance();
+	uint32_t shard;
+	MurmurHash3_x86_32(key.c_str(), key.size(), type, &shard);
+
+	int size = key.size() + 32;
+	uint64_t msg_id = engine.next_message_id();
+	_enc_declare_(req, size);
+	_enc_put_msg_header_(req, MessageType::OBJ_INC, msg_id, shard);
+	_enc_put_fix32_(req, shard);
+	_enc_put_var32_(req, type);
+	_enc_put_string_(req, key);
+	_enc_put_var64_(req, val);
+	_enc_update_msg_size_(req);
+
+	DO_REQUEST_REPLY;
+	if (code==ErrorCode::OK)
+	{
+		_dec_get_var64_(rep,val);
+	}
+	if (!_dec_valid_(rep)) return ErrorCode::IO_ERROR;
+	return code;
+}
+
 int Database::exist(uint32_t type, string key)
 {
 	//TODO: implement

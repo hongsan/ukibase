@@ -39,6 +39,10 @@ bool ObjectService::process(message_ptr const & message, connection_ptr const & 
 	case MessageType::OBJ_DEL:
 		del(message, connection);
 		return true;
+	case MessageType::OBJ_INC:
+		inc(message, connection);
+		return true;
+
 	}
 	return false;
 }
@@ -149,6 +153,45 @@ void ObjectService::del(message_ptr const & message, connection_ptr const & conn
 	_enc_declare_(rep, 32);
 	_enc_put_msg_header_(rep, MessageType::REPLY, message->id, 0);
 	_enc_put_var32_(rep, r);
+	_enc_update_msg_size_(rep);
+	connection->send(_enc_data_(rep), _enc_size_(rep));
+}
+
+void ObjectService::inc(message_ptr const & message, connection_ptr const & connection)
+{
+	uint32_t shard, type;
+	string key;
+	uint64_t val;
+	_dec_declare2_(req, message->get_content_data(), message->get_content_size());
+	_dec_get_fix32_(req, shard);
+	_dec_get_var32_(req, type);
+	_dec_get_string_(req, key);
+	_dec_get_var64_(req, val);
+
+	if (!_dec_valid_(req))
+	{
+		_enc_declare_(rep, 32);
+		_enc_put_msg_header_(rep, MessageType::REPLY, message->id, 0);
+		_enc_put_var32_(rep, ErrorCode::BAD_FORMAT);
+		_enc_update_msg_size_(rep);
+		connection->send(_enc_data_(rep), _enc_size_(rep));
+		return;
+	}
+
+	_enc_declare_(key, key.size() + 32);
+	_enc_put_var32_(key, type);
+	_enc_put_buffer_(key, key, key.size());
+	leveldb::Slice skey(_enc_data_(key), _enc_size_(key));
+
+	int r = database->inc(skey, val);
+
+	_enc_declare_(rep, 32);
+	_enc_put_msg_header_(rep, MessageType::REPLY, message->id, 0);
+	_enc_put_var32_(rep, r);
+	if (r == ErrorCode::OK)
+	{
+		_enc_put_var64_(rep, val);
+	}
 	_enc_update_msg_size_(rep);
 	connection->send(_enc_data_(rep), _enc_size_(rep));
 }

@@ -26,6 +26,7 @@ public:
 	void get(message_ptr const & message, connection_ptr const & connection);
 	void set(message_ptr const & message, connection_ptr const & connection);
 	void del(message_ptr const & message, connection_ptr const & connection);
+	void inc(message_ptr const & message, connection_ptr const & connection);
 };
 
 } /* namespace db */
