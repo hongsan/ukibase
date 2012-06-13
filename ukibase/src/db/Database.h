@@ -29,6 +29,8 @@ public:
 	virtual ~Database();
 	void init();
 
+	uint64_t next_type_id();
+
 	/* object */
 	int set(leveldb::Slice& key, string& val);
 	int get(leveldb::Slice& key, string* val);

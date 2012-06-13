@@ -18,6 +18,8 @@
 #define COMP_DBSERVER		"dbserver"
 #define COMP_DBCLIENT		"dbclient"
 
+#define SEQ_DATATYPE		"datatype"
+
 /*****************************************************************************************/
 namespace MessageType
 {
@@ -25,8 +27,20 @@ enum
 {
 	/* core */
 	PING = 1, PONG = 2, REPLY = 3, BACKUP = 4, HELLO_REQ = 5, NODE_STATE = 6,
-	/* object */
-	OBJ_SET = 100, OBJ_GET = 101, OBJ_DEL = 102, OBJ_EXIST = 103, OBJ_INC = 104,
+	/* sequence */
+	SEQ_TYPE = 50, SEQ_CREATE = 51, SEQ_DROP = 52, SEQ_NEXT = 53,
+	/* collection */
+	COL_CREATE = 100, COL_DROP = 101, COL_ID = 102, COL_GET = 103, COL_PUT = 104, COL_DEL = 105, COL_EXIST = 106,
+};
+
+} // namespace MessageType
+
+/*****************************************************************************************/
+namespace DataType
+{
+enum
+{
+	SEQUENCE = 1, COLLECTION = 2, LIST = 3,
 };
 
 } // namespace MessageType

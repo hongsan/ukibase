@@ -14,7 +14,6 @@ using namespace std;
 using namespace ukicore;
 #include "commons/MurmurHash3.h"
 #include "../NodeConf.h"
-#include "Collection.h"
 
 namespace dbclient
 {
@@ -28,17 +27,30 @@ public:
 	virtual ~Database();
 	void init();
 
-	/* general object API */
-	int set(uint32_t type, string key, string val);
-	int get(uint32_t type, string key, string* val);
-	int del(uint32_t type, string key);
-	int exist(uint32_t type, string key);
-	int inc(uint32_t type, string key, uint64_t& val);
+	/* sequence */
+	int seq_create(string id, uint64_t init, bool asc = true);
+	int seq_drop(string id, uint64_t& val);
+	int seq_next(string id, uint64_t& val);
 
-	/* collection API */
-	collection_ptr get_collection(string id);
-	int create_collection(string id);
-	int drop_collection();
+	/* collection */
+	int col_create(string id, uint64_t& cid);
+	int col_drop(string id);
+	int col_id(string id, uint64_t& cid);
+	int col_get(uint64_t cid, string key, string& val);
+	int col_put(uint64_t cid, string key, string val);
+	int col_del(uint64_t cid, string key);
+	int col_exist(uint64_t cid, string key);
+
+	/* list */
+	int list_create(string id);
+	int list_drop(string id);
+	int list_size(string id);
+	int list_clear(string id);
+	int list_push_back(string id, string val);
+	int list_push_front(string id, string val);
+	int list_index(string id, uint32_t index, string& val);
+	int list_remove(string id, uint32_t index);
+	int list_range(string id, uint32_t index, uint32_t count, vector<string>& vals);
 };
 
 #define DO_REQUEST_REPLY\
@@ -55,3 +67,4 @@ public:
 
 } /* namespace db */
 #endif /* DATABASE_H_ */
+
