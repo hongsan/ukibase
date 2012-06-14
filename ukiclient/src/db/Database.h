@@ -45,7 +45,7 @@ public:
 	/* list */
 	int list_create(string id);
 	int list_drop(string id);
-	int list_size(string id);
+	int list_size(string id, uint32_t& size);
 	int list_clear(string id);
 	int list_push_back(string id, string val);
 	int list_push_front(string id, string val);
