@@ -26,10 +26,11 @@ public:
 	Database();
 	virtual ~Database();
 	void init();
+	uint64_t next_type_id();
 
 	/* sequence */
 	int seq_create(string id, uint64_t init, bool asc = true);
-	int seq_drop(string id, uint64_t& val);
+	int seq_drop(string id);
 	int seq_next(string id, uint64_t& val);
 
 	/* collection */

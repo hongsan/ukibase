@@ -38,11 +38,6 @@ public:
 	bool exist(leveldb::Slice& key);
 	int inc(leveldb::Slice& key, uint64_t& val);
 
-	/* collection */
-	int col_create(string& key);
-	int col_destroy(string& key);
-	int col_get_id(string& key, uint64_t& id);
-
 	/* list */
 	int list_create(string& key);
 	int list_destroy(string& key);

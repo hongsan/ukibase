@@ -31,114 +31,39 @@ void Database::init()
 	assert(config != NULL);
 }
 
-//int Database::seq_next(string id, uint64_t& val)
-//{
-//		Engine& engine = Engine::get_instance();
-//		uint32_t shard;
-//		MurmurHash3_x86_32(id.c_str(), id.size(), DataType::SEQUENCE, &shard);
-//
-//		int size = id.size() + 32;
-//		uint64_t msg_id = engine.next_message_id();
-//		_enc_declare_(req, size);
-//		_enc_put_msg_header_(req, MessageType::SEQ_NEXT, msg_id, shard);
-//		_enc_put_string_(req, id);
-//		_enc_update_msg_size_(req);
-//
-//		DO_REQUEST_REPLY;
-//		if (code==ErrorCode::OK)
-//		{
-//			_dec_get_var64_(rep,val);
-//		}
-//		if (!_dec_valid_(rep)) return ErrorCode::IO_ERROR;
-//		return code;
-//}
+uint64_t Database::next_type_id()
+{
+	Engine& engine = Engine::get_instance();
+	uint32_t shard;
+	string id = SEQ_DATATYPE;
+	MurmurHash3_x86_32(id.c_str(), id.size(), DataType::SEQUENCE, &shard);
 
-//int Database::set(uint64_t type, string key, string val)
-//{
-//	Engine& engine = Engine::get_instance();
-//	uint32_t shard;
-//	MurmurHash3_x86_32(key.c_str(), key.size(), 0, &shard);
-//
-//	int size = key.size() + val.size() + 32;
-//	uint64_t msg_id = engine.next_message_id();
-//	_enc_declare_(req, size);
-//	_enc_put_msg_header_(req, MessageType::OBJ_SET, msg_id, 0);
-//	_enc_put_var64_(req, type);
-//	_enc_put_string_(req, key);
-//	_enc_put_string_(req, val);
-//	_enc_update_msg_size_(req);
-//
-//	DO_REQUEST_REPLY;
-//
-//	if (!_dec_valid_(rep)) return ErrorCode::IO_ERROR;
-//	return code;
-//}
-//
-//int Database::get(uint64_t type, string key, string& val)
-//{
-//	Engine& engine = Engine::get_instance();
-//	uint32_t shard;
-//	MurmurHash3_x86_32(key.c_str(), key.size(), 0, &shard);
-//
-//	int size = key.size() + 32;
-//	uint64_t msg_id = engine.next_message_id();
-//	_enc_declare_(req, size);
-//	_enc_put_msg_header_(req, MessageType::OBJ_GET, msg_id, 0);
-//	_enc_put_var64_(req, type);
-//	_enc_put_string_(req, key);
-//	_enc_update_msg_size_(req);
-//
-//	DO_REQUEST_REPLY;
-//
-//	if (code == ErrorCode::OK)
-//	{
-//		_dec_get_string_(rep, val);
-//	}
-//	if (!_dec_valid_(rep)) return ErrorCode::IO_ERROR;
-//	return code;
-//}
-//
-//int Database::del(uint64_t type, string key)
-//{
-//	Engine& engine = Engine::get_instance();
-//	uint32_t shard;
-//	MurmurHash3_x86_32(key.c_str(), key.size(), 0, &shard);
-//
-//	int size = key.size() + 32;
-//	uint64_t msg_id = engine.next_message_id();
-//	_enc_declare_(req, size);
-//	_enc_put_msg_header_(req, MessageType::OBJ_DEL, msg_id, 0);
-//	_enc_put_var64_(req, type);
-//	_enc_put_string_(req, key);
-//	_enc_update_msg_size_(req);
-//
-//	DO_REQUEST_REPLY;
-//
-//	if (!_dec_valid_(rep)) return ErrorCode::IO_ERROR;
-//	return code;
-//}
-//
-//int Database::inc(uint64_t type, string key, uint64_t& val)
-//{
-//	Engine& engine = Engine::get_instance();
-//	uint32_t shard;
-//	MurmurHash3_x86_32(key.c_str(), key.size(), 0, &shard);
-//
-//	int size = key.size() + 32;
-//	uint64_t msg_id = engine.next_message_id();
-//	_enc_declare_(req, size);
-//	_enc_put_msg_header_(req, MessageType::OBJ_INC, msg_id, shard);
-//	_enc_put_var64_(req, type);
-//	_enc_put_string_(req, key);
-//	_enc_update_msg_size_(req);
-//
-//	DO_REQUEST_REPLY;
-//	if (code==ErrorCode::OK)
-//	{
-//		_dec_get_var64_(rep,val);
-//	}
-//	if (!_dec_valid_(rep)) return ErrorCode::IO_ERROR;
-//	return code;
-//}
+	int size = id.size() + 32;
+	uint64_t msg_id = engine.next_message_id();
+	_enc_declare_(req, size);
+	_enc_put_msg_header_(req, MessageType::SEQ_TYPE, msg_id, shard);
+	_enc_put_string_(req, id);
+	_enc_update_msg_size_(req);
+
+	servernode_ptr node = config->ring->get_node(shard);
+	boost::scoped_ptr<ReplyContext> context(new ReplyContext(msg_id));
+	engine.save_context(context.get());
+	node->connection->send(_enc_data_(req), _enc_size_(req));
+	context->wait();
+	engine.release_context(context.get());
+	if (!context->done) return 0;
+
+	int code;
+	_dec_declare2_(rep, context->get_reply()->get_content_data(), context->get_reply()->get_content_size());
+	_dec_get_var32_(rep, code);
+	uint64_t val;
+	if (code == ErrorCode::OK)
+	{
+		_dec_get_var64_(rep, val);
+	}
+	if (!_dec_valid_(rep)) return 0;
+	if (code != ErrorCode::OK) return 0;
+	return val;
+}
 
 } /* namespace db */

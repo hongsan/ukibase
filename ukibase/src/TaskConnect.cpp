@@ -82,12 +82,13 @@ bool TaskConnect::execute(Worker* worker)
 				return true;
 			}
 			engine.listen_connection(config->me->get_ip(), config->me->get_port());
+			server_connect(config->me, config->server_id);
 
 			/* send node state to Manager server */
 			NodeState state;
 			state.set_id(config->server_id);
 			state.set_state(NodeState::READY);
-			message_ptr msg = Message::pb_encode(state,MessageType::NODE_STATE,0,0);
+			message_ptr msg = Message::pb_encode(state, MessageType::NODE_STATE, 0, 0);
 			conn->send_message(msg);
 			return true;
 		}
@@ -106,7 +107,38 @@ bool TaskConnect::server_connect(servernode_ptr node, int my_id)
 		DLOG(ERROR) << "Error in server_connect to: " << node->get_ip() << ":" << node->get_port();
 		return false;
 	}
-	return true;
+
+	node->state = CONNECTED;
+	node->connection = conn;
+	uint64_t msg_id = engine.next_message_id();
+	_enc_declare_(ping, 1024);
+	_enc_put_msg_header_(ping, MessageType::PING, msg_id, 0);
+	_enc_put_var32_(ping, my_id);
+	_enc_update_msg_size_(ping);
+
+	boost::scoped_ptr<ReplyContext> context(new ReplyContext(msg_id));
+	engine.save_context(context.get());
+	conn->send(_enc_data_(ping), _enc_size_(ping));
+	context->wait();
+	engine.release_context(context.get());
+
+	if (context->done)
+	{
+		int code;
+		_dec_declare2_(rep, context->get_reply()->get_content_data(), context->get_reply()->get_content_size());
+		_dec_get_var32_(rep, code);
+		if (_dec_valid_(rep) && code == ErrorCode::OK)
+		{
+			conn->asyn = true;
+			conn->authenticated = true;
+			conn->data = node.get();
+			conn->type = CT_S2S;
+			node->connection = conn;
+			node->state = READY;
+			return true;
+		}
+	}
+	return false;
 }
 
 } /* namespace ukibase */

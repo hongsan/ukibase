@@ -9,8 +9,8 @@
 #include "leveldb/cache.h"
 #include <glog/logging.h>
 #include "commons/Constant.h"
-//#include "services/SequencerService.h"
-//#include "services/ListService.h"
+#include "services/CollectionService.h"
+#include "services/SequenceService.h"
 #include "commons/MessageUtil.h"
 #include "../NodeConf.h"
 #include "commons/MurmurHash3.h"
@@ -75,10 +75,10 @@ void Database::init()
 	ring = config->ring;
 	me = config->me;
 
-//	DLOG(INFO) << "Register ObjectService...";
-//	REGISTER_SERVICE (ObjectService);
-//	DLOG(INFO)<<"Register SequencerService...";
-//	REGISTER_SERVICE(SequencerService);
+	DLOG(INFO) << "Register SequenceService...";
+	REGISTER_SERVICE (SequenceService);
+	DLOG(INFO)<<"Register CollectionService...";
+	REGISTER_SERVICE(CollectionService);
 }
 
 int Database::set(leveldb::Slice& key, string& val)

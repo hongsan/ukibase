@@ -20,6 +20,8 @@
 
 #define SEQ_DATATYPE		"datatype"
 
+#define METADATA_TYPE		0
+
 /*****************************************************************************************/
 namespace MessageType
 {
