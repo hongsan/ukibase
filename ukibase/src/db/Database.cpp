@@ -9,11 +9,13 @@
 #include "leveldb/cache.h"
 #include <glog/logging.h>
 #include "commons/Constant.h"
-#include "services/CollectionService.h"
-#include "services/SequenceService.h"
 #include "commons/MessageUtil.h"
 #include "../NodeConf.h"
 #include "commons/MurmurHash3.h"
+
+#include "services/CollectionService.h"
+#include "services/SequenceService.h"
+#include "services/ListService.h"
 
 namespace ukibase
 {
@@ -79,6 +81,8 @@ void Database::init()
 	REGISTER_SERVICE (SequenceService);
 	DLOG(INFO)<<"Register CollectionService...";
 	REGISTER_SERVICE(CollectionService);
+	DLOG(INFO)<<"Register ListService...";
+	REGISTER_SERVICE(ListService);
 }
 
 int Database::set(leveldb::Slice& key, string& val)

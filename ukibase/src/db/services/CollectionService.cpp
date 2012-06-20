@@ -206,7 +206,7 @@ void CollectionService::create(message_ptr const & message, connection_ptr const
 	{
 		type_id = database->next_type_id();
 
-		DLOG(INFO) << "typeid=" << type_id;
+		//DLOG(INFO) << "typeid=" << type_id;
 		if (type_id > 0)
 		{
 			_enc_declare_(col, 64);
