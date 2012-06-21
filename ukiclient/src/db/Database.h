@@ -9,11 +9,13 @@
 #define DATABASE_H_
 #include "HashRing.h"
 #include <string>
+#include <map>
 #include "Component.h"
 using namespace std;
 using namespace ukicore;
 #include "commons/MurmurHash3.h"
 #include "../NodeConf.h"
+
 
 namespace dbclient
 {
@@ -40,7 +42,7 @@ public:
 	int col_get(uint64_t cid, string key, string& val);
 	int col_put(uint64_t cid, string key, string val);
 	int col_del(uint64_t cid, string key);
-	int col_exist(uint64_t cid, string key);
+	int col_exist(uint64_t cid, string key); //return OK or IS_NOT_FOUND
 
 	/* list */
 	int list_create(string id);
@@ -52,6 +54,22 @@ public:
 	int list_index(string id, uint32_t index, string& val);
 	int list_remove(string id, uint32_t index);
 	int list_range(string id, uint32_t index, uint32_t count, vector<string>& vals);
+
+	/* hash */
+	int hash_create(string id);
+	int hash_drop(string id);
+	int hash_size(string id, uint32_t& size);
+	int hash_clear(string id);
+	int hash_set(string id, string key, string value);
+	int hash_get(string id, string key, string& value);
+	int hash_del(string id, string key);
+	int hash_exist(string id, string key);
+
+	int hash_mset(string id, map<string, string>& data);
+	int hash_mget(string id, vector<string>& keys, vector<string>& values);
+	int hash_keys(string id, vector<string>& keys);
+	int hash_values(string id, vector<string>& values);
+	int hash_data(string id, map<string, string>& data);
 };
 
 #define DO_REQUEST_REPLY\

@@ -48,9 +48,9 @@ bool CollectionService::process(message_ptr const & message, connection_ptr cons
 	case MessageType::COL_DEL:
 		del(message, connection);
 		return true;
-//	case MessageType::COL_EXIST:
-//		exist(message, connection);
-//		return true;
+	case MessageType::COL_EXIST:
+		exist(message, connection);
+		return true;
 	}
 	return false;
 }
@@ -142,6 +142,35 @@ void CollectionService::get(message_ptr const & message, connection_ptr const & 
 	if (connection->send(_enc_data_(rep), _enc_size_(rep)) < 0)
 	{
 		DLOG(ERROR) << "Send error from COL_GET for key " << key;
+	}
+}
+
+void CollectionService::exist(message_ptr const & message, connection_ptr const & connection)
+{
+	uint64_t cid;
+	string key;
+	_dec_declare2_(req, message->get_content_data(), message->get_content_size());
+	_dec_get_var64_(req, cid);
+	_dec_get_string_(req, key);
+
+	DECODE_CHECK;
+
+	_enc_declare_(key, key.size() + 32);
+	_enc_put_var64_(key, cid);
+	_enc_put_buffer_(key, key, key.size());
+	leveldb::Slice skey(_enc_data_ (key), _enc_size_ (key));
+
+	int r = ErrorCode::IS_NOT_FOUND;
+	if (database->exist(skey)) r = ErrorCode::OK;
+
+	_enc_declare_(rep, 32);
+	_enc_put_msg_header_(rep, MessageType::REPLY, message->id, 0);
+	_enc_put_var32_(rep, r);
+	_enc_update_msg_size_(rep);
+
+	if (connection->send(_enc_data_(rep), _enc_size_(rep)) < 0)
+	{
+		DLOG(ERROR) << "Send error from COL_EXIST for key " << key;
 	}
 }
 

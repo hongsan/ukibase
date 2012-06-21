@@ -16,6 +16,7 @@
 #include "services/CollectionService.h"
 #include "services/SequenceService.h"
 #include "services/ListService.h"
+#include "services/HashService.h"
 
 namespace ukibase
 {
@@ -82,6 +83,8 @@ void Database::init()
 	DLOG(INFO)<<"Register CollectionService...";
 	REGISTER_SERVICE(CollectionService);
 	DLOG(INFO)<<"Register ListService...";
+	REGISTER_SERVICE(ListService);
+	DLOG(INFO)<<"Register HashService...";
 	REGISTER_SERVICE(ListService);
 }
 
