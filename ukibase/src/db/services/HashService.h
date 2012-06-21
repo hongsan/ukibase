@@ -25,6 +25,10 @@ public:
 	void drop(message_ptr const & message, connection_ptr const & connection);
 	void size(message_ptr const & message, connection_ptr const & connection);
 	void clear(message_ptr const & message, connection_ptr const & connection);
+	void get(message_ptr const & message, connection_ptr const & connection);
+	void set(message_ptr const & message, connection_ptr const & connection);
+	void del(message_ptr const & message, connection_ptr const & connection);
+	void exist(message_ptr const & message, connection_ptr const & connection);
 };
 }
 #endif /* HASHSERVICE_H_ */

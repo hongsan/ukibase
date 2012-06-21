@@ -85,7 +85,7 @@ void Database::init()
 	DLOG(INFO)<<"Register ListService...";
 	REGISTER_SERVICE(ListService);
 	DLOG(INFO)<<"Register HashService...";
-	REGISTER_SERVICE(ListService);
+	REGISTER_SERVICE(HashService);
 }
 
 int Database::set(leveldb::Slice& key, string& val)

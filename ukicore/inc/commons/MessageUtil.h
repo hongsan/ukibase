@@ -144,6 +144,13 @@
 	for (size_t i=0; i<size; i++) enc##_buf[enc##_index++] = val[i];\
 }
 
+#define _enc_append_key_(enc, val)\
+{\
+	std::string val1 = val;\
+	size_t size = val1.size();\
+	for (size_t i=0;i<size; i++) enc##_buf[enc##_index++] = val1[i];\
+}
+
 #define _enc_put_var32_(enc, val) {uint32_t val1 = val; _var_uint32_(enc##_buf,enc##_index,val1);}
 #define _enc_put_var64_(enc, val) {uint64_t val1 = val; _var_uint64_(enc##_buf,enc##_index,val1);}
 

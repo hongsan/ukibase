@@ -340,7 +340,7 @@ void ListService::size(message_ptr const & message, connection_ptr const & conne
 
 	if (connection->send(_enc_data_(rep), _enc_size_(rep)) < 0)
 	{
-		DLOG(ERROR) << "Send error from LIST_DROP for key " << id;
+		DLOG(ERROR) << "Send error from LIST_SIZE for key " << id;
 	}
 }
 

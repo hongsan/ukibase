@@ -98,12 +98,12 @@ int Database::hash_set(string id, string key, string value)
 {
 	Engine& engine = Engine::get_instance();
 	uint32_t shard;
-	MurmurHash3_x86_32(key.c_str(), key.size(), DataType::HASH, &shard);
+	MurmurHash3_x86_32(id.c_str(), id.size(), DataType::HASH, &shard);
 
 	int size = id.size() + key.size() + value.size() + 32;
 	uint64_t msg_id = engine.next_message_id();
 	_enc_declare_(req, size);
-	_enc_put_msg_header_(req, MessageType::HASH_SET, msg_id, 0);
+	_enc_put_msg_header_(req, MessageType::HASH_SET, msg_id, shard);
 	_enc_put_string_(req, id);
 	_enc_put_string_(req, key);
 	_enc_put_string_(req, value);
@@ -119,12 +119,12 @@ int Database::hash_get(string id, string key, string& value)
 {
 	Engine& engine = Engine::get_instance();
 	uint32_t shard;
-	MurmurHash3_x86_32(key.c_str(), key.size(), DataType::HASH, &shard);
+	MurmurHash3_x86_32(id.c_str(), id.size(), DataType::HASH, &shard);
 
 	int size = id.size() + key.size() + 32;
 	uint64_t msg_id = engine.next_message_id();
 	_enc_declare_(req, size);
-	_enc_put_msg_header_(req, MessageType::HASH_GET, msg_id, 0);
+	_enc_put_msg_header_(req, MessageType::HASH_GET, msg_id, shard);
 	_enc_put_string_(req, id);
 	_enc_put_string_(req, key);
 	_enc_update_msg_size_(req);
@@ -142,12 +142,12 @@ int Database::hash_del(string id, string key)
 {
 	Engine& engine = Engine::get_instance();
 	uint32_t shard;
-	MurmurHash3_x86_32(key.c_str(), key.size(), DataType::HASH, &shard);
+	MurmurHash3_x86_32(id.c_str(), id.size(), DataType::HASH, &shard);
 
 	int size = id.size()+key.size() + 32;
 	uint64_t msg_id = engine.next_message_id();
 	_enc_declare_(req, size);
-	_enc_put_msg_header_(req, MessageType::HASH_DEL, msg_id, 0);
+	_enc_put_msg_header_(req, MessageType::HASH_DEL, msg_id, shard);
 	_enc_put_string_(req, id);
 	_enc_put_string_(req, key);
 	_enc_update_msg_size_(req);
@@ -160,6 +160,22 @@ int Database::hash_del(string id, string key)
 
 int Database::hash_exist(string id, string key)
 {
+	Engine& engine = Engine::get_instance();
+	uint32_t shard;
+	MurmurHash3_x86_32(id.c_str(), id.size(), DataType::HASH, &shard);
+
+	int size = id.size()+key.size() + 32;
+	uint64_t msg_id = engine.next_message_id();
+	_enc_declare_(req, size);
+	_enc_put_msg_header_(req, MessageType::HASH_EXIST, msg_id, shard);
+	_enc_put_string_(req, id);
+	_enc_put_string_(req, key);
+	_enc_update_msg_size_(req);
+
+	DO_REQUEST_REPLY;
+
+	if (!_dec_valid_(rep)) return ErrorCode::IO_ERROR;
+	return code;
 }
 
 }
