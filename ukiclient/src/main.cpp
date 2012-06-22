@@ -12,7 +12,6 @@
 #include <boost/make_shared.hpp>
 #include "db/Database.h"
 #include "NodeConf.h"
-#include "TestTask.h"
 
 using namespace std;
 using namespace ukicore;

@@ -82,7 +82,13 @@ void SequenceService::drop(message_ptr const & message, connection_ptr const & c
 	_enc_put_buffer_(key, id, id.size());
 	leveldb::Slice skey(_enc_data_(key), _enc_size_(key));
 
-	int r = database->del(skey);
+	int r = ErrorCode::OK;
+	if (database->exist(skey))
+	{
+		r = database->del(skey);
+	}
+	else r = ErrorCode::IS_NOT_FOUND;
+
 	_enc_declare_(rep, 32);
 	_enc_put_msg_header_(rep, MessageType::REPLY, message->id, 0);
 	_enc_put_var32_(rep, r);

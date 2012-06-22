@@ -6,10 +6,11 @@
  */
 
 #include "TestTask.h"
-#include "db/Database.h"
+#include "../db/Database.h"
 #include "Engine.h"
 #include "commons/Constant.h"
 #include <glog/logging.h>
+#include "gtest/gtest.h"
 namespace dbclient
 {
 
@@ -23,38 +24,43 @@ TestTask::~TestTask()
 
 bool TestTask::execute(Worker* worker)
 {
-	Database* database = (Database*) Engine::get_instance().get_component(COMP_DBCLIENT).get();
-	if (database == NULL)
-	{
-		DLOG(INFO) << "Error in get database";
-	}
+	int argc = 1;
+	char* argv[] = {"ukiclient"};
+	 ::testing::InitGoogleTest(&argc, argv);
+	 RUN_ALL_TESTS();
 
-	DLOG(INFO) << "Test hash";
-	int r = database->hash_create("test1");
-	DLOG(INFO) << "r =" << r;
-
-	r = database->hash_set("test1", "1", "a");
-	DLOG(INFO) << "r =" << r;
-	r = database->hash_set("test1", "2", "b");
-	DLOG(INFO) << "r =" << r;
-	uint32_t hsize;
-	r = database->hash_size("test1", hsize);
-	DLOG(INFO) << "r =" << r << ", size = " << hsize;
-
-	string hval;
-	r = database->hash_get("test1", "1", hval);
-	DLOG(INFO) << "r =" << r << ", val = " << hval;
-	r = database->hash_del("test1", "1");
-	DLOG(INFO) << "r =" << r;
-	r = database->hash_size("test1", hsize);
-	DLOG(INFO) << "r =" << r << ", size = " << hsize;
-
-	r = database->hash_clear("test1");
-	DLOG(INFO) << "r =" << r;
-	r = database->hash_size("test1", hsize);
-	DLOG(INFO) << "r =" << r << ", size = " << hsize;
-	r = database->hash_drop("test1");
-	DLOG(INFO) << "r =" << r;
+//	Database* database = (Database*) Engine::get_instance().get_component(COMP_DBCLIENT).get();
+//	if (database == NULL)
+//	{
+//		DLOG(INFO) << "Error in get database";
+//	}
+//
+//	DLOG(INFO) << "Test hash";
+//	int r = database->hash_create("test1");
+//	DLOG(INFO) << "r =" << r;
+//
+//	r = database->hash_set("test1", "1", "a");
+//	DLOG(INFO) << "r =" << r;
+//	r = database->hash_set("test1", "2", "b");
+//	DLOG(INFO) << "r =" << r;
+//	uint32_t hsize;
+//	r = database->hash_size("test1", hsize);
+//	DLOG(INFO) << "r =" << r << ", size = " << hsize;
+//
+//	string hval;
+//	r = database->hash_get("test1", "1", hval);
+//	DLOG(INFO) << "r =" << r << ", val = " << hval;
+//	r = database->hash_del("test1", "1");
+//	DLOG(INFO) << "r =" << r;
+//	r = database->hash_size("test1", hsize);
+//	DLOG(INFO) << "r =" << r << ", size = " << hsize;
+//
+//	r = database->hash_clear("test1");
+//	DLOG(INFO) << "r =" << r;
+//	r = database->hash_size("test1", hsize);
+//	DLOG(INFO) << "r =" << r << ", size = " << hsize;
+//	r = database->hash_drop("test1");
+//	DLOG(INFO) << "r =" << r;
 
 //	uint64_t type = database->next_type_id();
 //	DLOG(INFO) << "type =" << type;
@@ -136,7 +142,7 @@ bool TestTask::execute(Worker* worker)
 //	r = database->list_drop("test5");
 //	DLOG(INFO) << "r =" << r;
 
-	DLOG(INFO) << "Test task";
+	//DLOG(INFO) << "Test task";
 	return true;
 }
 

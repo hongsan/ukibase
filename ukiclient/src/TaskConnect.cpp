@@ -12,7 +12,7 @@
 #include "commons/Constant.h"
 #include "NodeConf.h"
 #include "manager.pb.h"
-#include "TestTask.h"
+#include "test/TestTask.h"
 
 using namespace ukicore;
 
