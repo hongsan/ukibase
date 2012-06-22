@@ -11,7 +11,7 @@
 #include "glog/logging.h"
 using namespace dbclient;
 
-TEST(sequence, seq_create_drop)
+TEST(sequence, create_drop)
 {
 	Database* database = (Database*) Engine::get_instance().get_component(COMP_DBCLIENT).get();
 	ASSERT_TRUE(database != NULL);
@@ -29,7 +29,7 @@ TEST(sequence, seq_create_drop)
 	ASSERT_TRUE(r==ErrorCode::IS_NOT_FOUND);
 }
 
-TEST(sequence, seq_next1)
+TEST(sequence, next1)
 {
 	Database* database = (Database*) Engine::get_instance().get_component(COMP_DBCLIENT).get();
 	ASSERT_TRUE(database != NULL);
@@ -50,7 +50,7 @@ TEST(sequence, seq_next1)
 	ASSERT_TRUE(r==0);
 }
 
-TEST(sequence, seq_next2)
+TEST(sequence, next2)
 {
 	Database* database = (Database*) Engine::get_instance().get_component(COMP_DBCLIENT).get();
 	ASSERT_TRUE(database != NULL);

@@ -10,7 +10,7 @@
 #include "glog/logging.h"
 using namespace dbclient;
 
-TEST(collection, col_create_drop)
+TEST(collection, create_drop)
 {
 	Database* database = (Database*) Engine::get_instance().get_component(COMP_DBCLIENT).get();
 	ASSERT_TRUE(database != NULL);
@@ -26,7 +26,7 @@ TEST(collection, col_create_drop)
 	ASSERT_TRUE(r==0);
 }
 
-TEST(collection, col_get_set_del)
+TEST(collection, get_set_del)
 {
 	Database* database = (Database*) Engine::get_instance().get_component(COMP_DBCLIENT).get();
 	ASSERT_TRUE(database != NULL);
