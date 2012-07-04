@@ -74,12 +74,6 @@ bool HashRing::del_node(servernode_ptr node)
 	return true;
 }
 
-servernode_ptr HashRing::get_node(const char* id)
-{
-	uint32_t hash = HashUtil::hash_code(id);
-	return get_node(hash);
-}
-
 servernode_ptr HashRing::get_node(uint32_t hash)
 {
 	boost::mutex::scoped_lock lock(mutex);

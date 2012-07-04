@@ -31,7 +31,6 @@ public:
 
 	bool add_node(servernode_ptr node);
 	bool del_node(servernode_ptr node);
-	servernode_ptr get_node(const char* id);
 	servernode_ptr get_node(uint32_t hash);
 	servernode_ptr get_node(uint32_t hash, uint32_t& slot);
 	servernode_ptr get_preference(uint32_t hash);
