@@ -32,8 +32,6 @@ private:
 public:
 	connection_ptr connection;
 	ServerState state;
-	time_t connected_time;
-	servernode_ptr preference;
 
 	ServerNode(int id, std::string name, std::string type, std::string ip, int port)
 	{
